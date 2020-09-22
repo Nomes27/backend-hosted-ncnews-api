@@ -1,9 +1,10 @@
-process.env.NODE_ENV = "test";
-
 const request = require("supertest");
 const app = require("../app");
 const knex = require("../db/connection");
 
+beforeEach(() => {
+  return knex.seed.run();
+});
 afterAll(() => {
   return knex.destroy();
 });
@@ -19,16 +20,16 @@ describe("/api", () => {
             expect(body).toEqual({
               topics: [
                 {
-                  description: "Code is love, code is life",
-                  slug: "coding",
+                  description: "The man, the Mitch, the legend",
+                  slug: "mitch",
                 },
                 {
-                  description: "FOOTIE!",
-                  slug: "football",
+                  description: "Not dogs",
+                  slug: "cats",
                 },
                 {
-                  description: "Hey good looking, what you got cooking?",
-                  slug: "cooking",
+                  description: "what books are made of",
+                  slug: "paper",
                 },
               ],
             });

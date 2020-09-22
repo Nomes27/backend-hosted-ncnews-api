@@ -4,7 +4,9 @@ const fetchTopics = () => {
   return knex
     .select("*")
     .from("topics")
+    .returning("*")
     .then((topicsData) => {
+      console.log(topicsData);
       return { topics: topicsData };
     });
 };
