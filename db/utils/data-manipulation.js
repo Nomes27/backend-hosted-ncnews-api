@@ -17,7 +17,6 @@ const makeArticleRef = (unformattedArticles) => {
 
     //foreach insertedArticle
     //sets refObj key to article title, value is set to article_id
-    // console.log(refObj);
   });
   // console.log(refObj); {the vegan carnivore? :36}
   return refObj;

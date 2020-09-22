@@ -27,7 +27,7 @@ exports.seed = function (knex) {
     })
     .then((insertedArticles) => {
       const comments = commentsFormatter(commentData, insertedArticles);
-      console.log(comments);
+
       return knex.insert(comments).into("comments").returning("*");
     })
     .catch((err) => {
