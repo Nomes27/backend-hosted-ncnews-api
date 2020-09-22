@@ -1,4 +1,4 @@
-const { fetchTopics } = require("../models/models");
+const { fetchTopics } = require("../models/topicsModels");
 
 const getTopics = (req, res, next) => {
   fetchTopics()
@@ -7,7 +7,6 @@ const getTopics = (req, res, next) => {
     })
     .catch((err) => {
       next(err);
-      console.log();
     });
 };
 

@@ -7,7 +7,8 @@
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed-test": "npm run setup-dbs && NODE_ENV=test knex seed:run",
     "seed": "knex seed:run",
-    "test": "jest",
+    "test-utils": "jest __tests__/utils.test.js",
+    "test": "jest __tests__/app.test.js",
     "migrate_make": "knex migrate:make"
   },
   "repository": {
