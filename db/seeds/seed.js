@@ -26,11 +26,9 @@ exports.seed = function (knex) {
       return knex.insert(articles).into("articles").returning("*");
     })
     .then((insertedArticles) => {
-      console.log(insertedArticles);
-      /*
-                  belongs_to (article.title) --> article_id
-                  author
-                  */
+      const comments = commentsFormatter(commentData, insertedArticles);
+      console.log(comments);
+      return knex.insert(comments).into("comments").returning("*");
     })
     .catch((err) => {
       console.log(err);

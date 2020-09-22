@@ -14,19 +14,29 @@ const makeArticleRef = (unformattedArticles) => {
   const refObj = {};
   unformattedArticles.forEach((article) => {
     refObj[article.title] = article.article_id;
-    console.log(refObj);
+
+    //foreach insertedArticle
+    //sets refObj key to article title, value is set to article_id
+    // console.log(refObj);
   });
+  // console.log(refObj); {the vegan carnivore? :36}
   return refObj;
 };
 
 const commentsFormatter = (commentData, insertedArticles) => {
   const artiRef = makeArticleRef(insertedArticles);
+
   return commentData.map((comment) => {
     const commentCopy = { ...comment };
     const date = new Date(comment.created_at);
     commentCopy.created_at = date;
+
     commentCopy.article_id = artiRef[comment.belongs_to];
+    commentCopy.author = commentCopy.created_by; //accessing the article title from the ref obj (belongs_to on the comments obj), sets the value as article id, saved to the key of article_id
+
+    delete commentCopy.created_by;
     delete commentCopy.belongs_to;
+
     return commentCopy;
   });
 };
