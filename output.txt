@@ -1,0 +1,17 @@
+You are now connected to database "nc_news_test" as user "naomi-s".
+ article_id |                         title                          | votes | topic |    author     |         created_at         | comment_count 
+------------+--------------------------------------------------------+-------+-------+---------------+----------------------------+---------------
+          4 | Student SUES Mitch!                                    |     0 | mitch | rogersop      | 2006-11-18 12:21:54.171+00 |             0
+          7 | Z                                                      |     0 | mitch | icellusedkars | 1994-11-21 12:21:54.171+00 |             0
+         10 | Seven inspirational thought leaders from Manchester UK |     0 | mitch | rogersop      | 1982-11-24 12:21:54.171+00 |             0
+          9 | They're not exactly dogs, are they?                    |     0 | mitch | butter_bridge | 1986-11-23 12:21:54.171+00 |             2
+          6 | A                                                      |     0 | mitch | icellusedkars | 1998-11-20 12:21:54.171+00 |             1
+         12 | Moustache                                              |     0 | mitch | butter_bridge | 1974-11-26 12:21:54.171+00 |             0
+          3 | Eight pug gifs that remind me of mitch                 |     0 | mitch | icellusedkars | 2010-11-17 12:21:54.171+00 |             0
+          1 | Living in the shadow of a great man                    |   100 | mitch | butter_bridge | 2018-11-15 12:21:54.171+00 |            13
+          5 | UNCOVERED: catspiracy to bring down democracy          |     0 | cats  | rogersop      | 2002-11-19 12:21:54.171+00 |             2
+          2 | Sony Vaio; or, The Laptop                              |     0 | mitch | icellusedkars | 2014-11-16 12:21:54.171+00 |             0
+          8 | Does Mitch predate civilisation?                       |     0 | mitch | icellusedkars | 1990-11-22 12:21:54.171+00 |             0
+         11 | Am I a cat?                                            |     0 | mitch | icellusedkars | 1978-11-25 12:21:54.171+00 |             0
+(12 rows)
+
