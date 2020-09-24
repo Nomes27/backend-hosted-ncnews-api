@@ -6,6 +6,7 @@ const fetchArticles = (article_id) => {
     .then((article) => {
       return article[0];
     });*/
+
   return knex
     .select(
       "articles.article_id",
@@ -22,17 +23,39 @@ const fetchArticles = (article_id) => {
     .leftJoin("comments", "articles.article_id", "comments.article_id")
     .groupBy("articles.article_id")
     .then((article) => {
-      //transform comment_count to a number:
-      const commentCountToNum = article.map((arti) => {
-        arti.comment_count = Number(art.comment_count);
-        return arti;
-      });
+      if (article.length === 0) {
+        return Promise.reject({ msg: "article_id does not exist" });
+      } else {
+        //transform comment-count to a number
+        const commentCountToNum = article.map((arti) => {
+          const copyArticle = { ...arti };
+          copyArticle.comment_count = Number(copyArticle.comment_count);
+          return copyArticle;
+        });
 
-      return commentCountToNum[0];
+        return commentCountToNum[0];
+      }
     });
 
   //COUNT ALL COMMENTS WHICH USE THIS ARTICLE_ID
   //NEEDS total count of all the comments with this article_id - you should make use of knex queries in order to achieve this
 };
+//below shows article without comment count
+const changeVotesForArticle = (article_id, inc_votes) => {
+  return knex("articles")
+    .where("article_id", article_id)
+    .increment("votes", inc_votes)
+    .returning("*")
+    .then((article) => {
+      if (article.length === 0) {
+        return Promise.reject({ msg: "article_id does not exist" });
+      } else {
+        return article[0];
+      }
+    });
+  //.increment("votes", inc_votes);
+};
 
-module.exports = fetchArticles;
+//return knex("articles").where("article_id", article_id);
+
+module.exports = { changeVotesForArticle, fetchArticles };

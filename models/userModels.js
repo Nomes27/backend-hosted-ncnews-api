@@ -5,7 +5,7 @@ const fetchUser = (username) => {
     .where("username", username)
     .then((user) => {
       if (user.length === 0) {
-        return Promise.reject({ rejection: "user does not exist" });
+        return Promise.reject({ msg: "user does not exist" });
       } else {
         return user[0];
         //to get it out of the array

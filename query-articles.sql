@@ -5,6 +5,7 @@ SELECT articles.article_id, title, articles.votes, topic, articles.author, artic
 GROUP BY articles.article_id;
 
 
+--left articles.body from above as too much to see in ouput.txt--
 
 --group by gets rid of all duplicate article ids, so only 1 of each--
 --LEFT JOIN because not all articles have comments, standard would be an inner join but that is no good here as it gets all data at the intersection between articles and comments, but we want to include the articles that don't have comments too, so need a left join
