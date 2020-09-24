@@ -3,6 +3,7 @@ const error404Handler = (req, res, next) => {
 };
 
 //ERROR HANDLING MIDDLEWARE FUNCTIONS
+
 const error400Handler = (err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ msg: "bad request" });
@@ -10,7 +11,7 @@ const error400Handler = (err, req, res, next) => {
   next(err);
 };
 const error404NonExistentHandler = (err, req, res, next) => {
-  //console.log(err)  ie.{ msg: 'article_id does not exist' }
+  //console.log(err)  ie.{ msg: 'article_id does not exist' }promsise.reject
   res.status(404).send({ msg: err.msg });
   next(err);
 };

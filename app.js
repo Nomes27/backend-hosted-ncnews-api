@@ -11,6 +11,7 @@ const {
 app.use(express.json());
 app.use("/api", apiRouter);
 app.all("/*", error404Handler);
+
 app.use(error400Handler);
 app.use(error404NonExistentHandler);
 
