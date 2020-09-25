@@ -70,6 +70,14 @@ describe("app", () => {
               expect(msg).toBe("user does not exist");
             });
         });
+        it("status 405 - method not allowed", () => {
+          return request(app)
+            .delete("/api/users/butter-bridge")
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe("method not allowed");
+            });
+        });
       });
     });
     describe("/articles/:article_id", () => {
@@ -122,7 +130,7 @@ describe("app", () => {
 
             .expect(405)
             .then(({ body: { msg } }) => {
-              expect(msg).toBe("method not permitted");
+              expect(msg).toBe("method not allowed");
             });
         });
       });
@@ -165,6 +173,16 @@ describe("app", () => {
               });
             });
         });
+        it("status 404 - article_id does not exist", () => {
+          const incrementVotes = { inc_votes: 1 };
+          return request(app)
+            .patch("/api/articles/1000")
+            .send(incrementVotes)
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe("article_id does not exist");
+            });
+        });
         it("status 400 - bad request : article_id should be a number", () => {
           const incrementVotes = { inc_votes: 2 };
           return request(app)
@@ -191,27 +209,57 @@ describe("app", () => {
       describe("POST", () => {
         it("status 201 - it responds with a posted comment with properties of username and body", () => {
           const comment = {
-            username: "lurker",
-            body: "this is the best article I've ever read.",
+            username: "icellusedkars",
+            body:
+              "This is the best article I've ever read. Insightful is an understatement.",
           };
-          request(app)
+          return request(app)
             .post("/api/articles/1/comments")
             .send(comment)
             .expect(201)
-            .then(({ body: { msg } }) => {
+            .then(({ body }) => {
               expect(body).toEqual({
-                username: "lurker",
-                body: "this is the best article I've ever read.",
+                username: "icellusedkars",
+                body:
+                  "This is the best article I've ever read. Insightful is an understatement.",
               });
-              expect(msg).toBe("Your comment was posted");
+              expect(body).hasOwnProperty("username");
+              expect(body).hasOwnProperty("body");
             });
         });
+        it("status 400 - bad request :article_id should be a number", () => {
+          const comment = {
+            username: "icellusedkars",
+            body:
+              "This is the best article I've ever read. Insightful is an understatement.",
+          };
+          return request(app)
+            .post("/api/articles/cat/comments")
+            .send(comment)
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe("bad request");
+            });
+        });
+      });
+      describe("GET", () => {
+        it("status 200 - responds with an array of comments from the specified article_id", () => {
+          return request(app)
+            .get("/api/articles/1/comments")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.length).toBe(2);
+            });
+        });
+        it("status 200- each comment should have properties of comment_id, votes, created_at, author and body", () => {});
       });
     });
   });
 });
-
-/*ERRORS
-No inc_votes on request body
-
-Some other property on request body (e.g. { inc_votes : 1, name: 'Mitch' }) this is dealt with by model only accepting val accociated with inc_vote */
+/*
+an array of comments for the given article_id of which each comment should have the following properties:
+comment_id
+votes
+created_at
+author which is the username from the users table
+body*/

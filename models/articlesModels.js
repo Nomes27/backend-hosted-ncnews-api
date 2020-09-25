@@ -1,12 +1,6 @@
 const knex = require("../db/connection");
 
 const fetchArticles = (article_id) => {
-  /*return knex("articles")
-    .where("article_id", article_id)
-    .then((article) => {
-      return article[0];
-    });*/
-
   return knex
     .select(
       "articles.article_id",
