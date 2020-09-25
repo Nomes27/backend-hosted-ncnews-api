@@ -251,7 +251,7 @@ describe("app", () => {
               expect(body.length).toBe(2);
             });
         });
-        it("status 200- each comment should have properties of comment_id, votes, created_at, author and body", () => {});
+        xit("status 200- each comment should have properties of comment_id, votes, created_at, author and body", () => {});
       });
     });
   });

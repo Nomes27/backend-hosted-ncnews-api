@@ -3,6 +3,7 @@ const {
   postComment,
   getComments,
 } = require("../controllers/commentsControllers");
-commentsRouter.get("/comments", getComments);
+commentsRouter.post("/", postComment);
+commentsRouter.get("/", getComments);
 
 module.exports = commentsRouter;

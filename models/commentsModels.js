@@ -23,8 +23,10 @@ const createComment = (comment, article_id) => {
 };
 const fetchComments = (article_id) => {
   /////
-  return knex("comments")
-    .where("article_id", article_id)
+  return knex
+    .select("*")
+    .from("comments") /*
+    .where("article_id", article_id)*/
     .returning("*")
     .then((allComments) => {
       console.log(allComments);
