@@ -1,6 +1,6 @@
 const knex = require("../db/connection");
 
-const fetchArticles = (article_id) => {
+const fetchArticleById = (article_id) => {
   return knex
     .select(
       "articles.article_id",
@@ -50,6 +50,36 @@ const changeVotesForArticle = (article_id, inc_votes) => {
   //.increment("votes", inc_votes);
 };
 
-//return knex("articles").where("article_id", article_id);
+const fetchArticles = () => {
+  return knex
+    .select(
+      "articles.article_id",
+      "title",
+      "articles.body",
+      "articles.votes",
+      "topic",
+      "articles.author",
+      "articles.created_at"
+    )
+    .from("articles")
+    .count({ comment_count: "comments.article_id" })
+    .leftJoin("comments", "articles.article_id", "comments.article_id")
+    .groupBy("articles.article_id")
+    .then((article) => {
+      if (article.length === 0) {
+        return Promise.reject({ msg: "article_id does not exist" });
+      } else {
+        //transform comment-count to a number
+        const commentCountToNum = article.map((arti) => {
+          const copyArticle = { ...arti };
+          copyArticle.comment_count = Number(copyArticle.comment_count);
+          return copyArticle;
+        });
 
-module.exports = { changeVotesForArticle, fetchArticles };
+        return commentCountToNum;
+      }
+    });
+  ///
+};
+
+module.exports = { changeVotesForArticle, fetchArticleById, fetchArticles };

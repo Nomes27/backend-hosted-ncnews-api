@@ -28,7 +28,11 @@ const fetchComments = (article_id, sort_by = "created_at", order = "desc") => {
     .returning("*")
     .orderBy(sort_by, order)
     .then((allComments) => {
-      return allComments;
+      if (allComments.length === 0) {
+        return Promise.reject({ msg: "article_id does not exist" });
+      } else {
+        return allComments;
+      }
     });
 };
 
