@@ -30,7 +30,9 @@ const patchArticleById = (req, res, next) => {
 };
 
 const getArticles = (req, res, next) => {
-  fetchArticles()
+  const { sort_by } = req.query;
+  const { order } = req.query;
+  fetchArticles(sort_by, order)
     .then((allArticles) => {
       console.log(allArticles);
       res.status("200").send(allArticles);

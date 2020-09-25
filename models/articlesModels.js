@@ -50,7 +50,7 @@ const changeVotesForArticle = (article_id, inc_votes) => {
   //.increment("votes", inc_votes);
 };
 
-const fetchArticles = () => {
+const fetchArticles = (sort_by = "created_at", order = "desc") => {
   return knex
     .select(
       "articles.article_id",
@@ -65,6 +65,7 @@ const fetchArticles = () => {
     .count({ comment_count: "comments.article_id" })
     .leftJoin("comments", "articles.article_id", "comments.article_id")
     .groupBy("articles.article_id")
+    .orderBy(sort_by, order)
     .then((article) => {
       if (article.length === 0) {
         return Promise.reject({ msg: "article_id does not exist" });

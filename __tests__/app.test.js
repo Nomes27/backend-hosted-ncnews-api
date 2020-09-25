@@ -102,6 +102,30 @@ describe("app", () => {
               });
             });
         });
+        it("status 200- articles should sort_by created_at by default and be ordered in descending order by default", () => {
+          return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).toBeSortedBy("created_at", { descending: true });
+            });
+        });
+        it("status 200 - reponds when passed a query of sort_by author and an order query of ascending", () => {
+          return request(app)
+            .get("/api/articles?sort_by=author&&order=asc")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).toBeSortedBy("author");
+            });
+        });
+        it("status 200 - responds to an author query with articles relating to the passed in author", () => {
+          return request(app)
+            .get("/api/articles?author=icellusedkars")
+            .expect(200)
+            .then(({ body }) => {
+              ////
+            });
+        });
       });
       describe("/:article_id", () => {
         describe("GET", () => {
