@@ -14,8 +14,11 @@ const postComment = (req, res, next) => {
 };
 const getComments = (req, res, next) => {
   const { article_id } = req.params;
+  const { sort_by } = req.query;
+  const { order } = req.query;
+  req.query;
   console.groupCollapsed(article_id);
-  fetchComments(article_id)
+  fetchComments(article_id, sort_by, order)
     .then((returnedComments) => {
       res.status(200).send(returnedComments);
     })

@@ -261,6 +261,26 @@ describe("app", () => {
               expect(body).hasOwnProperty("created_at");
               expect(body).hasOwnProperty("author");
               expect(body).hasOwnProperty("body");
+              expect(body.length).toBe(2);
+            });
+        });
+        it("status 200 - comments should be sorted by default by created_at, with a default order of descending", () => {
+          return request(app)
+            .get("/api/articles/9/comments")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.length).toBe(2);
+              console.log(body);
+              expect(body).toBeSortedBy("created_at", { descending: true });
+            });
+        });
+        it("status 200 - accepts queries : comments should be sorted by votes and in ascending order, when passed a sort_by query and an order query", () => {
+          return request(app)
+            .get("/api/articles/9/comments?sort_by=votes&&order=asc")
+            .expect(200)
+            .then(({ body }) => {
+              console.log(body);
+              expect(body).toBeSortedBy("votes");
             });
         });
       });
@@ -268,5 +288,9 @@ describe("app", () => {
   });
 });
 
+//sort_by, which sorts the comments by any valid column (defaults to created_at)
+//order, which can be set to asc or desc for ascending or descending (defaults to descending)
+
 //do array destructuring  .then ([item])
 //rest operator, put inside what want change rater than underneath
+//comments?sort_by=columnname

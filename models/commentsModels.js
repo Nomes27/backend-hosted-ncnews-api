@@ -21,11 +21,12 @@ const createComment = (comment, article_id) => {
       })
   );
 };
-const fetchComments = (article_id) => {
+const fetchComments = (article_id, sort_by = "created_at", order = "desc") => {
   /////
   return knex("comments")
     .where("article_id", article_id)
     .returning("*")
+    .orderBy(sort_by, order)
     .then((allComments) => {
       return allComments;
     });
