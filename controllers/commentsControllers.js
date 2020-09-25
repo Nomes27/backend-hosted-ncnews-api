@@ -14,7 +14,7 @@ const postComment = (req, res, next) => {
 };
 const getComments = (req, res, next) => {
   const { article_id } = req.params;
-  console.log(req.params + "reqparams");
+  console.groupCollapsed(article_id);
   fetchComments(article_id)
     .then((returnedComments) => {
       res.status(200).send(returnedComments);

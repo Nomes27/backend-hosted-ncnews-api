@@ -248,18 +248,25 @@ describe("app", () => {
             .get("/api/articles/1/comments")
             .expect(200)
             .then(({ body }) => {
-              expect(body.length).toBe(2);
+              expect(body.length).toBe(13);
             });
         });
-        xit("status 200- each comment should have properties of comment_id, votes, created_at, author and body", () => {});
+        it("status 200- each comment should have properties of comment_id, votes, created_at, author and body", () => {
+          return request(app)
+            .get("/api/articles/9/comments")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).hasOwnProperty("comment_id");
+              expect(body).hasOwnProperty("votes");
+              expect(body).hasOwnProperty("created_at");
+              expect(body).hasOwnProperty("author");
+              expect(body).hasOwnProperty("body");
+            });
+        });
       });
     });
   });
 });
-/*
-an array of comments for the given article_id of which each comment should have the following properties:
-comment_id
-votes
-created_at
-author which is the username from the users table
-body*/
+
+//do array destructuring  .then ([item])
+//rest operator, put inside what want change rater than underneath
