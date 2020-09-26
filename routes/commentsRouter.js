@@ -1,9 +1,10 @@
 const commentsRouter = require("express").Router();
 const {
-  postComment,
-  getComments,
+  patchCommentById,
+  deleteCommentById,
 } = require("../controllers/commentsControllers");
-commentsRouter.post("/:article_id/comments", postComment);
-commentsRouter.get("/:article_id/comments", getComments);
-
+const { error405Handler } = require("../errors");
+commentsRouter.patch("/:comment_id", patchCommentById);
+commentsRouter.delete("/:comment_id", deleteCommentById);
+commentsRouter.all("/*", error405Handler);
 module.exports = commentsRouter;

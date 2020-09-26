@@ -118,12 +118,26 @@ describe("app", () => {
               expect(body).toBeSortedBy("author");
             });
         });
-        it("status 200 - responds to an author query with articles relating to the passed in author", () => {
+        it("status 200 - responds to an author query with an array of article objects relating to the passed in author", () => {
           return request(app)
             .get("/api/articles?author=icellusedkars")
             .expect(200)
             .then(({ body }) => {
-              ////
+              expect(body.length).toBe(6);
+              body.forEach((article) => {
+                expect(article.author).toBe("icellusedkars");
+              });
+            });
+        });
+        it("status 200 - responds to a topic query with an array of article objects relating to the passed in topic", () => {
+          return request(app)
+            .get("/api/articles?topic=cats")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.length).toBe(1);
+              body.forEach((article) => {
+                expect(article.topic).toBe("cats");
+              });
             });
         });
       });
@@ -173,7 +187,7 @@ describe("app", () => {
           });
           it("status 405 - method not allowed", () => {
             return request(app)
-              .delete("/api/articles/2")
+              .post("/api/articles/2")
 
               .expect(405)
               .then(({ body: { msg } }) => {
@@ -251,6 +265,24 @@ describe("app", () => {
               });
           });
         });
+        describe("DELETE", () => {
+          it("status 204 -deletes the article when passed an article_id", () => {
+            return request(app)
+              .delete("/api/articles/1")
+              .expect(204)
+              .then(({ body }) => {
+                expect(body).toEqual({});
+              }); /*
+              .then(() => {
+                return request(app)
+                  .get("/api/articles/1")
+                  .expect(404)
+                  .then(({ body: { msg } }) => {
+                    expect(msg).toEqual("does not");
+                  });
+              });*/
+          });
+        });
       });
       describe("/api/articles/:article_id/comments", () => {
         describe("POST", () => {
@@ -317,7 +349,7 @@ describe("app", () => {
               .expect(200)
               .then(({ body }) => {
                 expect(body.length).toBe(2);
-                console.log(body);
+
                 expect(body).toBeSortedBy("created_at", { descending: true });
               });
           });
@@ -326,7 +358,6 @@ describe("app", () => {
               .get("/api/articles/9/comments?sort_by=votes&&order=asc")
               .expect(200)
               .then(({ body }) => {
-                console.log(body);
                 expect(body).toBeSortedBy("votes");
               });
           });
@@ -344,6 +375,75 @@ describe("app", () => {
               .expect(404)
               .then(({ body: { msg } }) => {
                 expect(msg).toBe("article_id does not exist");
+              });
+          });
+        });
+      });
+    });
+    describe("/comments", () => {
+      describe("':comment_id", () => {
+        describe("PATCH", () => {
+          it("status 200 - accepts an object with the key of inc_votes and a value which indicates how much the comment votes should be updated by", () => {
+            const increaseVotes = { inc_votes: 1 };
+            return request(app)
+              .patch("/api/comments/1")
+              .expect(200)
+              .send(increaseVotes)
+              .then(({ body }) => {
+                expect(body).toEqual({
+                  article_id: 9,
+                  author: "butter_bridge",
+                  body:
+                    "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                  comment_id: 1,
+                  created_at: "2017-11-22T12:36:03.389Z",
+                  votes: 17,
+                });
+              });
+          });
+          it("status 200 - decreases the votes of the comment when passed an object containing inc_votes and a negative value", () => {
+            const decreaseVotes = { inc_votes: -1 };
+            return request(app)
+              .patch("/api/comments/1")
+              .send(decreaseVotes)
+              .then(({ body }) => {
+                expect(body.votes).toBe(15);
+              });
+          });
+          it("status 405 - method not allowed", () => {
+            return request(app)
+              .post("/api/comments/1")
+              .expect(405)
+              .then(({ body: { msg } }) => {
+                expect(msg).toEqual("method not allowed");
+              });
+          });
+          it("status 404 - comment_id does not exist", () => {
+            const increaseVotes = { inc_votes: 1 };
+            return request(app)
+              .patch("/api/comments/1000")
+              .send(increaseVotes)
+              .then(({ body: { msg } }) => {
+                expect(msg).toBe("comment_id does not exist");
+              });
+          });
+          it("status 400 - bad request :comment_id should be a number", () => {
+            const increaseVotes = { inc_votes: 1 };
+            return request(app)
+              .patch("/api/comments/dog")
+              .send(increaseVotes)
+              .then(({ body: { msg } }) => {
+                expect(msg).toBe("bad request");
+              });
+          });
+        });
+        describe("DELETE", () => {
+          it("status 204 - it deletes the given comment by it's comment_id and responds with status 204 ", () => {
+            return request(app)
+              .delete("/api/comments/1")
+              .expect(204)
+              .then(({ body }) => {
+                expect(body).toEqual({});
               });
           });
         });

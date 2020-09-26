@@ -2,6 +2,7 @@ const {
   fetchArticleById,
   changeVotesForArticle,
   fetchArticles,
+  fetchArticleToDelete,
 } = require("../models/articlesModels");
 
 const getArticleById = (req, res, next) => {
@@ -19,7 +20,7 @@ const getArticleById = (req, res, next) => {
 const patchArticleById = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
-  console.log(inc_votes);
+
   changeVotesForArticle(article_id, inc_votes)
     .then((article) => {
       res.status(200).send(article);
@@ -30,16 +31,33 @@ const patchArticleById = (req, res, next) => {
 };
 
 const getArticles = (req, res, next) => {
-  const { sort_by } = req.query;
-  const { order } = req.query;
-  fetchArticles(sort_by, order)
+  const { sort_by, order, author, topic } = req.query;
+
+  fetchArticles(sort_by, order, author, topic)
     .then((allArticles) => {
-      console.log(allArticles);
-      res.status("200").send(allArticles);
+      res.status(200).send(allArticles);
     })
     .catch((err) => {
       next(err);
     });
 };
 
-module.exports = { getArticleById, patchArticleById, getArticles };
+const deleteArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+
+  fetchArticleToDelete(article_id)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
+};
+
+module.exports = {
+  getArticleById,
+  patchArticleById,
+  getArticles,
+  deleteArticleById,
+};

@@ -1,5 +1,6 @@
 const knex = require("../db/connection");
 
+//COMMENTS RELATING TO ARTICLE_ID -UNDER ENDPOINT API/ARTICLES/:ARTICLE_ID/COMMENTS
 const createComment = (comment, article_id) => {
   return (
     knex
@@ -35,5 +36,35 @@ const fetchComments = (article_id, sort_by = "created_at", order = "desc") => {
       }
     });
 };
+//COMENTS UNDER THE ENDPOINT OF API/COMMENTS/:COMMENT_ID
 
-module.exports = { createComment, fetchComments };
+const fetchCommentById = (comment_id, inc_votes) => {
+  return knex("comments")
+    .where("comment_id", comment_id)
+    .increment("votes", inc_votes)
+    .returning("*")
+    .then(([comment]) => {
+      //array destructuring
+      if (!comment) {
+        return Promise.reject({ msg: "comment_id does not exist" });
+      } else {
+        return comment;
+      }
+    });
+};
+
+const fetchCommentToDelete = (comment_id) => {
+  return knex("comments")
+    .where("comment_id", comment_id)
+    .del()
+    .then(() => {
+      return;
+    });
+};
+
+module.exports = {
+  createComment,
+  fetchComments,
+  fetchCommentById,
+  fetchCommentToDelete,
+};
