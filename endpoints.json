@@ -25,3 +25,42 @@
     }
   }
 }
+[
+  { "GET /api/topics": "gets all the topics of the articles" },
+  {
+    "GET api/users/:username":
+      "gets a specific user when given an id",
+  },
+  {
+    "GET /api/articles":
+      "gets all the articles in an array of objects- this accepts queries of sort_by and order. It can also filter by topic and author",
+  },
+  {
+    "GET /api/articles/:article_id":
+      "returns a an article object when passed an article_id",
+  },
+  {
+    "PATCH /api/articles/:id":
+      "allows to pass an object with an inc_votes key, where votes for the article_id can be ammended",
+  },
+  {
+    "DELETE /api/articles/:article_id":
+      "deletes a specific article when passed an article_id",
+  },
+  {
+    "GET /api/articles/:article_id/comments":
+      "gets all comments as an array for a particular article",
+  },
+  {
+    "POST /api/articles/:article_id/comments":
+      "allows to pass object of username and body to post a comment to a specific article",
+  },
+  {
+    "PATCH /api/comments/comment_id":
+      "allows to adjust the votes for a specific comment by passing in an object with a key of inc_votes and a value",
+  },
+  {
+    "DELETE /api/comments/comment_id":
+      "deletes a specific comment by it's comment_id",
+  },
+]

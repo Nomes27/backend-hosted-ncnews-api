@@ -54,8 +54,12 @@ const fetchArticles = (
   sort_by = "created_at",
   order = "desc",
   author,
-  topic
+  topic,
+  limit = 10,
+  p
 ) => {
+  const offset = (p - 1) * limit;
+
   return (
     knex
       .select(
@@ -78,8 +82,12 @@ const fetchArticles = (
           query.where("topic", topic);
         }
       })
+      //offset = p-1 *limit
+      //ofset is the number of entries to be skipped
 
       .from("articles")
+      .limit(limit)
+      .offset(offset)
       .count({ comment_count: "comments.article_id" })
       .leftJoin("comments", "articles.article_id", "comments.article_id")
       .groupBy("articles.article_id")
@@ -109,7 +117,7 @@ const fetchArticleToDelete = (article_id) => {
     .then(() => {
       return;
     });
-}; //Key (article_id)=(1) is still referenced from table "comments".', -- want to delete all comments which then reference the article_id too - to deal with this had to put onDelete("CASCADE") in the comments schema where it reference article_id
+}; //err was Key (article_id)=(1) is still referenced from table "comments".', -- want to delete all comments which then reference the article_id too - to deal with this err had to put onDelete("CASCADE") in the comments schema where it reference article_id
 
 module.exports = {
   changeVotesForArticle,

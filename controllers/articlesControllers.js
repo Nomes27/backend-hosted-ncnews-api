@@ -31,9 +31,9 @@ const patchArticleById = (req, res, next) => {
 };
 
 const getArticles = (req, res, next) => {
-  const { sort_by, order, author, topic } = req.query;
+  const { sort_by, order, author, topic, limit, p } = req.query;
 
-  fetchArticles(sort_by, order, author, topic)
+  fetchArticles(sort_by, order, author, topic, limit, p)
     .then((allArticles) => {
       res.status(200).send(allArticles);
     })
@@ -50,7 +50,6 @@ const deleteArticleById = (req, res, next) => {
       res.status(204).send();
     })
     .catch((err) => {
-      console.log(err);
       next(err);
     });
 };

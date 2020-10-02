@@ -89,7 +89,7 @@ describe("app", () => {
             .get("/api/articles")
             .expect(200)
             .then(({ body }) => {
-              expect(body.length).toBe(12);
+              expect(body.length).toBe(10); //would be 12, but now have limit query
               expect(Array.isArray(body)).toBe(true);
               body.forEach((article) => {
                 expect(article).toHaveProperty("author");
@@ -137,6 +137,34 @@ describe("app", () => {
               expect(body.length).toBe(1);
               body.forEach((article) => {
                 expect(article.topic).toBe("cats");
+              });
+            });
+        });
+        it("status 200 - has a default limit query of 10 and a page query", () => {
+          return request(app)
+            .get("/api/articles?p=2")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.length).toBe(2);
+            });
+          //12 total, limit defaults to 10, so on page 2 the length should be 2
+        });
+        it("status 200 - accepts a limit query which is different to the default of 10 and a page query", () => {
+          return request(app)
+            .get("/api/articles?limit=3&&p=3")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.length).toBe(3);
+              //12 total, 3 per page. p3 should have length of 3
+              //would expect article ids to be 7,8,9
+              body.forEach((article, index) => {
+                if (index === 0) {
+                  expect(article.article_id).toBe(7);
+                } else if (index === 1) {
+                  expect(article.article_id).toBe(8);
+                } else if (index === 2) {
+                  expect(article.article_id).toBe(9);
+                }
               });
             });
         });
@@ -272,15 +300,23 @@ describe("app", () => {
               .expect(204)
               .then(({ body }) => {
                 expect(body).toEqual({});
-              }); /*
+              })
               .then(() => {
                 return request(app)
                   .get("/api/articles/1")
                   .expect(404)
                   .then(({ body: { msg } }) => {
-                    expect(msg).toEqual("does not");
+                    expect(msg).toEqual("article_id does not exist");
                   });
-              });*/
+              });
+          });
+          it("status 400 - bad request, article_id should be a number", () => {
+            return request(app)
+              .delete("/api/articles/dog")
+              .expect(400)
+              .then(({ body: { msg } }) => {
+                expect(msg).toBe("bad request");
+              });
           });
         });
       });
