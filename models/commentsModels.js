@@ -22,11 +22,20 @@ const createComment = (comment, article_id) => {
       })
   );
 };
-const fetchComments = (article_id, sort_by = "created_at", order = "desc") => {
+const fetchComments = (
+  article_id,
+  sort_by = "created_at",
+  order = "desc",
+  limit = 10,
+  p
+) => {
   /////
+  const offset = (p - 1) * limit;
   return knex("comments")
     .where("article_id", article_id)
     .returning("*")
+    .limit(limit)
+    .offset(offset)
     .orderBy(sort_by, order)
     .then((allComments) => {
       if (allComments.length === 0) {

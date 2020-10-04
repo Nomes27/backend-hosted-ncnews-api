@@ -168,6 +168,17 @@ describe("app", () => {
               });
             });
         });
+        it("status 200- it returns an array of articles with the total_count property which displays the total number of articles with filters applied, discounting the limit", () => {
+          return request(app)
+            .get("/api/articles?limit3&&p=3")
+            .expect(200)
+            .then(({ body }) => {
+              body.forEach((article) => {
+                expect(article).toHaveProperty("total_count");
+                expect(article.total_count).toBe(12);
+              });
+            });
+        });
       });
       describe("/:article_id", () => {
         describe("GET", () => {
@@ -363,7 +374,8 @@ describe("app", () => {
               .get("/api/articles/1/comments")
               .expect(200)
               .then(({ body }) => {
-                expect(body.length).toBe(13);
+                expect(body.length).toBe(10);
+                //was 13 but now limit introduced
               });
           });
           it("status 200- each comment should have properties of comment_id, votes, created_at, author and body", () => {
@@ -396,6 +408,27 @@ describe("app", () => {
               .then(({ body }) => {
                 expect(body).toBeSortedBy("votes");
               });
+          });
+          it("status 200 - accepts a limit query which defaults to 10", () => {
+            return request(app)
+              .get("/api/articles/1/comments")
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.length).toBe(10);
+              });
+          });
+          it("status 200- accepts a page query", () => {
+            return (
+              request(app)
+                .get("/api/articles/1/comments?limit=2&&p=2")
+                //13 total
+                //length should be two and comment id should be 3 and 4
+                .expect(200)
+                .then(({ body }) => {
+                  console.log(body);
+                  expect(body.length).toBe(2);
+                })
+            );
           });
           it("status 400 - bad request : article_id should be a number", () => {
             return request(app)

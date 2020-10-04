@@ -84,20 +84,21 @@ const fetchArticles = (
       })
       //offset = p-1 *limit
       //ofset is the number of entries to be skipped
-
       .from("articles")
+
       .limit(limit)
       .offset(offset)
       .count({ comment_count: "comments.article_id" })
       .leftJoin("comments", "articles.article_id", "comments.article_id")
       .groupBy("articles.article_id")
       .orderBy(sort_by, order)
-      .then((article) => {
-        if (article.length === 0) {
+      .then((articles) => {
+        if (articles.length === 0) {
           return Promise.reject({ msg: "article_id does not exist" });
         } else {
           //transform comment-count to a number
-          const commentCountToNum = article.map((arti) => {
+
+          const commentCountToNum = articles.map((arti) => {
             const copyArticle = { ...arti };
             copyArticle.comment_count = Number(copyArticle.comment_count);
             return copyArticle;
