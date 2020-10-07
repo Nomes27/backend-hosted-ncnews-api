@@ -1,11 +1,11 @@
 const express = require("express");
-
+const getEndPoints = require("../controllers/endpointsJSONController");
 const apiRouter = express.Router();
 const topicsRouter = require("./topicsRouter");
 const usersRouter = require("./usersRouter");
 const articlesRouter = require("./articlesRouter");
 const commentsRouter = require("./commentsRouter");
-//apiRouter.get("/", getEndPoints);
+apiRouter.get("/", getEndPoints);
 apiRouter.use("/topics", topicsRouter);
 apiRouter.use("/users", usersRouter);
 apiRouter.use("/articles", articlesRouter);

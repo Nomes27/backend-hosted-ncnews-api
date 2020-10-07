@@ -20,6 +20,114 @@ describe("app", () => {
   });
 
   describe("/api", () => {
+    describe("GET", () => {
+      it("status 200- returns a json description of all the available endpoints of the api", () => {
+        return request(app)
+          .get("/api")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body).toEqual({
+              "GET /api": {
+                description:
+                  "serves up a json representation of all the available endpoints of the api",
+              },
+              "GET /api/topics": {
+                description: "serves an array of all topics",
+                queries: [],
+                exampleResponse: {
+                  topics: [{ slug: "football", description: "Footie!" }],
+                },
+              },
+              "GET /api/articles": {
+                description: "serves an array of all topics",
+                queries: [
+                  "author",
+                  "topic",
+                  "sort_by",
+                  "order",
+                  "limit",
+                  "page",
+                ],
+                exampleResponse: {
+                  articles: [
+                    {
+                      title: "Seafood substitutions are increasing",
+                      topic: "cooking",
+                      author: "weegembump",
+                      body: "Text from the article..",
+                      created_at: 1527695953341,
+                    },
+                  ],
+                },
+              },
+              "GET api/users/:username": {
+                description:
+                  "serves a specific user object when passed a username",
+                queries: [],
+                exampleResponse: {
+                  username: "butter_bridge",
+                  name: "jonny",
+                  avatar_url:
+                    "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+                },
+              },
+
+              "GET /api/articles/:article_id": {
+                description:
+                  "serves an article object when passed an article_id",
+                queries: [],
+                exampleResponse: {
+                  article_id: 1,
+                  title: "Living in the shadow of a great man",
+                  body: "I find this existence challenging",
+                  votes: 100,
+                  topic: "mitch",
+                  author: "butter_bridge",
+                  created_at: "2018-11-15T12:21:54.171Z",
+                  comment_count: 13,
+                },
+              },
+              "PATCH /api/articles/:article_id": {
+                description:
+                  "allows the votes property to be incremented or decremented when passed an inc_votes object",
+                queries: [],
+                examplePatch: { inc_votes: 1 },
+              },
+              "DELETE /api/articles/:article_id": {
+                description:
+                  "allows an article to be deleted by it's article_id",
+              },
+
+              "GET /api/articles/:article_id/comments": {
+                description:
+                  "serves an array or article comments from the specified article_id",
+                queries: ["sort_by", "order", "limit", "page"],
+              },
+              "POST /api/articles/:article_id/comments": {
+                description:
+                  "allows a comment to be posted to a specific article_id",
+                queries: [],
+                examplePost: {
+                  username: "icellusedkars",
+                  body:
+                    "This is the best article I've ever read. Insightful is an understatement.",
+                },
+              },
+              "PATCH /api/comments/comment_id": {
+                description:
+                  "allows a comment's vote property to be incremented or decremented",
+                queries: [],
+                examplePatch: { inc_votes: 1 },
+              },
+
+              "DELETE /api/comments/comment_id": {
+                description: "allows a comment to be deleted by it's id",
+                queries: [],
+              },
+            });
+          });
+      });
+    });
     describe("/topics", () => {
       describe("GET", () => {
         it("status 200 - responds with an object, which holds an array on the key of topics", () => {
@@ -165,17 +273,6 @@ describe("app", () => {
                 } else if (index === 2) {
                   expect(article.article_id).toBe(9);
                 }
-              });
-            });
-        });
-        it("status 200- it returns an array of articles with the total_count property which displays the total number of articles with filters applied, discounting the limit", () => {
-          return request(app)
-            .get("/api/articles?limit3&&p=3")
-            .expect(200)
-            .then(({ body }) => {
-              body.forEach((article) => {
-                expect(article).toHaveProperty("total_count");
-                expect(article.total_count).toBe(12);
               });
             });
         });
@@ -425,7 +522,6 @@ describe("app", () => {
                 //length should be two and comment id should be 3 and 4
                 .expect(200)
                 .then(({ body }) => {
-                  console.log(body);
                   expect(body.length).toBe(2);
                 })
             );

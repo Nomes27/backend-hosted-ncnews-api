@@ -11,7 +11,7 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all topics",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "queries": ["author", "topic", "sort_by", "order", "limit", "page"],
     "exampleResponse": {
       "articles": [
         {
@@ -23,44 +23,60 @@
         }
       ]
     }
+  },
+  "GET api/users/:username": {
+    "description": "serves a specific user object when passed a username",
+    "queries": [],
+    "exampleResponse": {
+      "username": "butter_bridge",
+      "name": "jonny",
+      "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+    }
+  },
+
+  "GET /api/articles/:article_id": {
+    "description": "serves an article object when passed an article_id",
+    "queries": [],
+    "exampleResponse": {
+      "article_id": 1,
+      "title": "Living in the shadow of a great man",
+      "body": "I find this existence challenging",
+      "votes": 100,
+      "topic": "mitch",
+      "author": "butter_bridge",
+      "created_at": "2018-11-15T12:21:54.171Z",
+      "comment_count": 13
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "allows the votes property to be incremented or decremented when passed an inc_votes object",
+    "queries": [],
+    "examplePatch": { "inc_votes": 1 }
+  },
+  "DELETE /api/articles/:article_id": {
+    "description": "allows an article to be deleted by it's article_id"
+  },
+
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves an array or article comments from the specified article_id",
+    "queries": ["sort_by", "order", "limit", "page"]
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "allows a comment to be posted to a specific article_id",
+    "queries": [],
+    "examplePost": {
+      "username": "icellusedkars",
+      "body": "This is the best article I've ever read. Insightful is an understatement."
+    }
+  },
+  "PATCH /api/comments/comment_id": {
+    "description": "allows a comment's vote property to be incremented or decremented",
+    "queries": [],
+    "examplePatch": { "inc_votes": 1 }
+  },
+
+  "DELETE /api/comments/comment_id": {
+    "description": "allows a comment to be deleted by it's id",
+    "queries": []
   }
 }
-[
-  { "GET /api/topics": "gets all the topics of the articles" },
-  {
-    "GET api/users/:username":
-      "gets a specific user when given an id",
-  },
-  {
-    "GET /api/articles":
-      "gets all the articles in an array of objects- this accepts queries of sort_by and order. It can also filter by topic and author",
-  },
-  {
-    "GET /api/articles/:article_id":
-      "returns a an article object when passed an article_id",
-  },
-  {
-    "PATCH /api/articles/:id":
-      "allows to pass an object with an inc_votes key, where votes for the article_id can be ammended",
-  },
-  {
-    "DELETE /api/articles/:article_id":
-      "deletes a specific article when passed an article_id",
-  },
-  {
-    "GET /api/articles/:article_id/comments":
-      "gets all comments as an array for a particular article",
-  },
-  {
-    "POST /api/articles/:article_id/comments":
-      "allows to pass object of username and body to post a comment to a specific article",
-  },
-  {
-    "PATCH /api/comments/comment_id":
-      "allows to adjust the votes for a specific comment by passing in an object with a key of inc_votes and a value",
-  },
-  {
-    "DELETE /api/comments/comment_id":
-      "deletes a specific comment by it's comment_id",
-  },
-]
