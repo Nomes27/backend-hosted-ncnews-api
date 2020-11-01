@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NC News API</title>
+  </head>
+  <body>
+    <header>
+      <h1>NC News API</h1>
+    </header>
+    <h2>Routes:</h2>
+    <article>
+      <b>GET /api/topics:</b> serves an array of all topics <b>queries:</b>[]
+      <b>example response:</b> { topics: [{ slug: football, description: Footie!
+      }] } },
+    </article>
+
+    <article>
+      "GET /api/topics": { "description": "serves an array of all topics",
+      "queries": [], "exampleResponse": { "topics": [{ "slug": "football",
+      "description": "Footie!" }] } },
+    </article>
+    <article>
+      "GET /api/articles": { "description": "serves an array of all topics",
+      "queries": ["author", "topic", "sort_by", "order", "limit", "page"],
+      "exampleResponse": { "articles": [ { "title": "Seafood substitutions are
+      increasing", "topic": "cooking", "author": "weegembump", "body": "Text
+      from the article..", "created_at": 1527695953341 } ] } },
+    </article>
+    <article>
+      "GET api/users/:username": { "description": "serves a specific user object
+      when passed a username", "queries": [], "exampleResponse": { "username":
+      "butter_bridge", "name": "jonny", "avatar_url":
+      "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg" }
+      },
+    </article>
+    <article>
+      "GET /api/articles/:article_id": { "description": "serves an article
+      object when passed an article_id", "queries": [], "exampleResponse": {
+      "article_id": 1, "title": "Living in the shadow of a great man", "body":
+      "I find this existence challenging", "votes": 100, "topic": "mitch",
+      "author": "butter_bridge", "created_at": "2018-11-15T12:21:54.171Z",
+      "comment_count": 13 } },
+    </article>
+
+    <article>
+      "PATCH /api/articles/:article_id": { "description": "allows the votes
+      property to be incremented or decremented when passed an inc_votes
+      object", "queries": [], "examplePatch": { "inc_votes": 1 } },s
+    </article>
+    <article>
+      "DELETE /api/articles/:article_id": { "description": "allows an article to
+      be deleted by it's article_id" }, "GET
+      /api/articles/:article_id/comments": { "description": "serves an array or
+      article comments from the specified article_id", "queries": ["sort_by",
+      "order", "limit", "page"] },
+    </article>
+
+    <article>
+      "POST /api/articles/:article_id/comments": { "description": "allows a
+      comment to be posted to a specific article_id", "queries": [],
+      "examplePost": { "username": "icellusedkars", "body": "This is the best
+      article I've ever read. Insightful is an understatement." } },
+    </article>
+    <article>
+      "PATCH /api/comments/comment_id": { "description": "allows a comment's
+      vote property to be incremented or decremented", "queries": [],
+      "examplePatch": { "inc_votes": 1 } }, "DELETE /api/comments/comment_id": {
+      "description": "allows a comment to be deleted by it's id", "queries": []
+      } }
+    </article>
+  </body>
+</html>
