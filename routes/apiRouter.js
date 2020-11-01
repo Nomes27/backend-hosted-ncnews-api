@@ -1,5 +1,5 @@
 const express = require("express");
-const getEndPoints = require("../controllers/endpointsJSONController");
+
 const apiRouter = express.Router();
 const topicsRouter = require("./topicsRouter");
 const usersRouter = require("./usersRouter");
